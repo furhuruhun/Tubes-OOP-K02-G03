@@ -1,0 +1,28 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // kalo testing pake JUnit
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+}
+
+application {
+    mainClass = 'Main.Main' // Ganti dengan nama main class kl dh dibikin
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['app/src'] 
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
