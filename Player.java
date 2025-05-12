@@ -36,7 +36,7 @@ public class Player {
             this.gender = gender;
         }
         else{
-            System.out.println("Masukkan Laki-laki atau Perempuan")
+            System.out.println("Masukkan Laki-laki atau Perempuan");
         }
     }
     public int getEnergy(){
@@ -87,16 +87,20 @@ public class Player {
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
-    // public void addInventory(Item item) {
-    //     if(inventory.getItemCount() < inventory.getMaxItems()) {
-    //         inventory.addItem(item);
-    //     } else {
-    //         System.out.println("Inventory is full.");
-    //     }
-    // }
-    // public void removefromInventory(Item item) {
-    //     inventory.removeItem(item);
-    // }
+    public void addInventory(Items item) {
+        if(inventory.getItemsMap().containsKey(item)) {
+            inventory.addItem(item, 1);
+        } else {
+            inventory.addItem(item, 1);
+        }
+    }
+    public void removefromInventory(Items item, int quantity) {
+        if(inventory.getItemsMap().containsKey(item)) {
+            inventory.removeItem(item, quantity);
+        } else {
+            System.out.println("Item not found in inventory.");
+        }
+    }
     public Location getLocation_infarm() {
         return location_infarm;
     }
@@ -109,12 +113,7 @@ public class Player {
     public void setLocation_inworld(String location_inworld) {
         this.location_inworld = location_inworld;
     }
-    public boolean haveitem(Item item) {
-        for (Item i : inventory.getItems()) {
-            if (i.getName().equals(item.getName())) {
-                return true;
-            }
-        }
-        return false;
+    public boolean haveitem(Items item) {
+        return inventory.getItemsMap().containsKey(item);
     }
 }
