@@ -1,40 +1,60 @@
 package src.farmmap;
 
+import java.util.HashMap;
+import java.util.Map;
+import ShippingBin.ShippingBin;
+
 public class FarmMap {
     private static final int width = 32;
     private static final int height = 32;
     private House house;
     private Pond pond;
     private ShippingBin shippingBin;
-    private Tile[][] tiles;
+    private Map<Location, Tile> tiles;
 
     public FarmMap(House house, Pond pond, ShippingBin) {
         this.house = house;
         this.pond = pond;
         this.shippingBin = shippingBin;
-        tiles = new Tile[height][weight];
-
+        tiles = new HashMap<>();
     }
+
+    public Tile getTile(Location loc) {
+        return tiles.get(loc);
+    }
+
 
     public boolean canPlaceStructure(int x, int y, int w, int h) {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                if (tiles[y + i][x + j].getSymbol() != '.') {
+                Location loc = new Location(x + j, y + i);
+                Tile tile = tiles.get(loc);
+                if (tile == null || tile.getSymbol() != '.') {
                     return false;
                 }
             }
         }
         return true;
     }
-    
+
+    public void placeStructure(int x, int y, int w, int h, char symbol) {
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                Location loc = new Location(x + j, y + i);
+                tiles.get(loc).setSymbol(symbol);
+            }
+        }
+    }  
+
     public void generateMap() {
         // membuat peta kosongannya
         for (int i=0; i < height; i++) {
             for(int j=0; j < width; j++) {
-                tiles[i][j] = new Tile();
+                Location loc = new Location(j, i);
+                tiles.put(loc, new Tile());
             }
         }
-    };
+    }
 
     public void placeRandomHouse() {
         // meletakkan objek rumah secara random di dalam sebuah map
@@ -47,12 +67,8 @@ public class FarmMap {
             int y = (int)(Math.random() * (height - houseHeight));
             
             if (canPlaceStructure(x, y, houseWidth, houseHeight)) {
-                for (int i = 0; i < houseHeight; i++) {
-                    for (int j = 0; j < houseWidth; j++) {
-                        tiles[y + i][x + j].setSymbol('h');
-                    }
-                }
-                return; 
+                placeStructure(x, y, houseWidth, houseHeight, 'h');
+                return;
             }
         }
     };
@@ -66,12 +82,8 @@ public class FarmMap {
             int y = (int)(Math.random() * (height - pondHeight));
             
             if (canPlaceStructure(x, y, pondWidth, pondHeight)) {
-                for (int i = 0; i < pondWidth; i++) {
-                    for (int j = 0; j < pondHeight; j++) {
-                        tiles[y + i][x + j].setSymbol('p');
-                    }
-                }
-                return; 
+                placeStructure(x, y, pondWidth, pondHeight, 'p');
+                return;
             }
         }
 
@@ -87,18 +99,19 @@ public class FarmMap {
             int y = (int)(Math.random() * (height - shipHeight));
             
             if (canPlaceStructure(x, y, shipWidth, shipHeight)) {
-                for (int i = 0; i < shipWidth; i++) {
-                    for (int j = 0; j < shipHeight; j++) {
-                        tiles[y + i][x + j].setSymbol('s');
-                    }
-                }
-                return; 
+                placeStructure(x, y, shipWidth, shipHeight, 's');
+                return;
             }
         }
     };
 
     public void placePlayer(Location loc) {
         // Meletakkan objek player sesuai dengan parameter masukan 
+        if (tiles.containsKey(loc) && tiles.get(loc).getSymbol() == '.') {
+            tiles.get(loc).setSymbol('P');
+        } else {
+            System.out.println("Tidak bisa menempatkan player di lokasi tersebut.");
+        }
     };
 
     public void printMap() {
@@ -111,30 +124,38 @@ public class FarmMap {
         // Cetak hasil map
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                System.out.print(tiles[i][j].getSymbol() + " ");
+                Location loc = new Location(j, i);
+                Tile tile = tiles.get(loc);
+                System.out.print(tile != null ? tile.getSymbol() + " " : "? ");            
             }
-            System.out.println(); // newline setiap baris
+        System.out.println(); // newline setiap baris
         }
-
     };
 
-    public boolean isSameTile(Location loc) {
-        // mengecek apakah di satu lokasi tertentu terdapat dua objek sama (gw lupa ini buat method apa)
-    };
+    // public boolean isSameTile(Location loc) {
+    //     // mengecek apakah di satu lokasi tertentu terdapat dua objek sama (gw lupa ini buat method apa)
+    // };
 
     public boolean isEdgeTile(Location loc) {
         // Mengecek apakah player sudah berada di pojok tile/map
+            return ((player.getLocation_infarm().getX() == 31 && player.getLocation_infarm().getY() == 31) || (player.getLocation_infarm().getX() == 31 && player.getLocation_infarm().getY() == 0) || (player.getLocation_infarm().getX() == 0 && player.getLocation_infarm().getY() == 0) || (player.getLocation_infarm().getX() == 0 && player.getLocation_infarm().getY() == 31));
     };
 
     public boolean isEmpty(Location loc) {
         // Mengecek apakah di titik tersebut kosong dari 3 objek atau tidak 
+        Tile tile = tiles.get(loc);
+        return tile != null && tile.getSymbol() == '.';
     };
 
     public boolean isTillable(Location loc) {
         // cek apakah tanah siap tanam
+        Tile tile = tiles.get(loc);
+        return tile != null && tile.getSymbol() == 't';
     };
 
     public boolean isPlanted(Location loc) {
         // cek apakah tanah sudah ditanam sesuatu atau belum
+        Tile tile = tiles.get(loc);
+        return tile != null && tile.isPlanted();
     };
 }
