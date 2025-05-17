@@ -66,6 +66,7 @@ public class FarmMap {
             
             if (canPlaceStructure(x, y, houseWidth, houseHeight)) {
                 placeStructure(x, y, houseWidth, houseHeight, 'h');
+                this.house.setLocation(new Location(x, y)); // set lokasi rumah
                 return;
             }
         }
@@ -81,6 +82,7 @@ public class FarmMap {
             
             if (canPlaceStructure(x, y, pondWidth, pondHeight)) {
                 placeStructure(x, y, pondWidth, pondHeight, 'p');
+                this.pond.setLocation(new Location(x, y)); // set lokasi kolam
                 return;
             }
         }
@@ -98,6 +100,7 @@ public class FarmMap {
             
             if (canPlaceStructure(x, y, shipWidth, shipHeight)) {
                 placeStructure(x, y, shipWidth, shipHeight, 's');
+                this.shippingBin.setLocation(new Location(x, y)); // set lokasi shipping bin
                 return;
             }
         }
@@ -156,4 +159,23 @@ public class FarmMap {
         Tile tile = tiles.get(loc);
         return tile != null && tile.isPlanted();
     };
+
+    public House getHouse() {
+        return house;
+    }
+    public void setHouse(House house) {
+        this.house = house;
+    }
+    public Pond getPond() {
+        return pond;
+    }
+    public void setPond(Pond pond) {
+        this.pond = pond;
+    }
+    public ShippingBin getShippingBin() {
+        return shippingBin;
+    }
+    public void setShippingBin(ShippingBin shippingBin) {
+        this.shippingBin = shippingBin;
+    }
 }

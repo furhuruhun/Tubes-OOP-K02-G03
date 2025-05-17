@@ -10,9 +10,8 @@ public class Tiling extends Action{
             if(player.getFarmname().getFarmMap().isEmpty(player.getLocation_infarm())){ //cek tile di posisi player bisa di tiling apa ngga
 
                 if(player.getEnergy() >= 5){ //cek energi
-                    // nanti disini mau ditambahin pake moving
-                    //
-                    //
+                    player.setLocation_infarm(new Location(player.getLocation_infarm().getX() - 1, player.getLocation_infarm().getY()));
+                    player.getFarmname().getFarmMap().placePlayer(player.getLocation_infarm());
                     player.getFarmname().getFarmMap().getTile(player.getLocation_infarm()).setSymbol('t');
                     System.out.println("You have tilled the soil");
                     player.setEnergy(player.getEnergy() - 5);

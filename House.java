@@ -1,6 +1,7 @@
 public class House {
     private String name;
     private String owner;
+    private Location location;
     
     public House(Player owner) {
         this.owner = owner.getName();
@@ -18,6 +19,12 @@ public class House {
     }
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+    public Location getLocation() {
+        return location;
+    }
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
 //     public boolean cook(Player owner, Recipe recipe) {

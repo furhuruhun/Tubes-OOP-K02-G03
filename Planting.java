@@ -38,6 +38,8 @@ public class Planting extends Action {
                             scanner.close();
                             return;
                         }
+                        player.setLocation_infarm(new Location(player.getLocation_infarm().getX() - 1, player.getLocation_infarm().getY()));
+                        player.getFarmname().getFarmMap().placePlayer(player.getLocation_infarm());
                         player.getFarmname().getFarmMap().getTile(player.getLocation_infarm()).setSymbol('l');
                         player.getInventory().removeItem(seedToPlant, 1); // remove seeds from inventory
                         System.out.println("You have planted the seeds");

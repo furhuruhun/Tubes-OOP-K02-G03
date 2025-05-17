@@ -5,6 +5,7 @@ public class ShippingBin {
     private final int MAX_SLOTS = 16;
     private final Map<Items, Float> bin;
     private boolean soldToday;
+    private Location location;
 
     public ShippingBin() {
         this.bin = new HashMap<>();
@@ -109,5 +110,11 @@ public class ShippingBin {
         }
 
         System.out.println("Total Sell Price: " + totalSellPrice);
+    }
+    public Location getLocation() {
+        return location;
+    }
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
