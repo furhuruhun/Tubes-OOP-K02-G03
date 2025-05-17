@@ -113,6 +113,9 @@ public class Player {
     public void setLocation_inworld(String location_inworld) {
         this.location_inworld = location_inworld;
     }
+    public int getMaxEnergy() {
+        return maxenergy;
+    }
     public boolean haveitem(Items item) {
         return inventory.getItemsMap().containsKey(item);
     }

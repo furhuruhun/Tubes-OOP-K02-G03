@@ -1,16 +1,16 @@
 public class Seeds extends BuyableItems{
-    private String season;
+    private Season season;
     private int daystoharvest;
 
-    public Seeds(String name, String season, int daystoharvest, int hargaJual, int hargaBeli) {
+    public Seeds(String name, Season season, int daystoharvest, int hargaJual, int hargaBeli) {
         super(name, hargaJual, hargaBeli);
         this.season = season;
         this.daystoharvest = daystoharvest;
     }
-    public String getSeason() {
+    public Season getSeason() {
         return season;
     }
-    public void setSeason(String season) {
+    public void setSeason(Season season) {
         this.season = season;
     }
     public int getDaystoharvest() {
