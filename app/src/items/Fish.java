@@ -1,3 +1,5 @@
+package items;
+
 public class Fish extends NonBuyableItems{
     private String season;
     private int[] time;

@@ -1,7 +1,12 @@
-package src.farmmap;
+package farm.FarmMap;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import House.House;
+import Player.Location;
+import Player.Player;
+import Pond.Pond;
 import ShippingBin.ShippingBin;
 
 public class FarmMap {
@@ -12,7 +17,7 @@ public class FarmMap {
     private ShippingBin shippingBin;
     private Map<Location, Tile> tiles;
 
-    public FarmMap(House house, Pond pond, ShippingBin) {
+    public FarmMap(House house, Pond pond, ShippingBin ShippingBin) {
         this.house = house;
         this.pond = pond;
         this.shippingBin = shippingBin;
@@ -136,7 +141,7 @@ public class FarmMap {
     //     // mengecek apakah di satu lokasi tertentu terdapat dua objek sama (gw lupa ini buat method apa)
     // };
 
-    public boolean isEdgeTile(Location loc) {
+    public boolean isEdgeTile(Location loc,Player player) {
         // Mengecek apakah player sudah berada di pojok tile/map
             return ((player.getLocation_infarm().getX() == 31 && player.getLocation_infarm().getY() == 31) || (player.getLocation_infarm().getX() == 31 && player.getLocation_infarm().getY() == 0) || (player.getLocation_infarm().getX() == 0 && player.getLocation_infarm().getY() == 0) || (player.getLocation_infarm().getX() == 0 && player.getLocation_infarm().getY() == 31));
     };
@@ -158,4 +163,17 @@ public class FarmMap {
         Tile tile = tiles.get(loc);
         return tile != null && tile.isPlanted();
     };
+
+    public boolean isPlayerInHouse(Location playerLoc) {
+    Location houseLoc = house.getLocation(); 
+    int houseWidth = 6;
+    int houseHeight = 6;
+
+    int houseX = houseLoc.getX(); // x pojok kiri atas rumah
+    int houseY = houseLoc.getY(); // y pojok kiri atas rumah
+
+    return (playerLoc.getX() >= houseX && playerLoc.getX() < houseX + houseWidth) &&
+           (playerLoc.getY() >= houseY && playerLoc.getY() < houseY + houseHeight);
+    };
+
 }

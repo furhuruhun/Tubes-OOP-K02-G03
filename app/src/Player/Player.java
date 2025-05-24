@@ -1,3 +1,10 @@
+package Player;
+
+import farm.Farm;
+import inventory.Inventory;
+import items.Items;
+
+
 public class Player {
     private String name;
     private String gender;
@@ -74,7 +81,7 @@ public class Player {
     public float getGold() {
         return gold;
     }
-    public void setGold(float gold) {
+    public void setGold(int gold) {
         if(gold < 0) {
             System.out.println("Gold cannot be negative.");
         } else {

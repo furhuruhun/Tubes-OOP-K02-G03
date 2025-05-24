@@ -1,3 +1,6 @@
+package Player;
+import items.Items;
+
 public class NPC {
     private String name;
     private int heartpoints;
@@ -6,8 +9,9 @@ public class NPC {
     private Items hateditems;
     private String relationshipStatus;
     private String location;
+    private int dayEngaged;
 
-    public NPC(String name, int heartpoints, Items loveditems, Items likeditems, Items hateditems, String relationshipStatus, String location) {
+    public NPC(String name, int heartpoints, Items loveditems, Items likeditems, Items hateditems, String relationshipStatus, String location, int dayEngaged) {
         this.name = name;
         this.heartpoints = heartpoints;
         this.loveditems = loveditems;
@@ -15,6 +19,13 @@ public class NPC {
         this.hateditems = hateditems;
         this.relationshipStatus = relationshipStatus;
         this.location = location;
+        this.dayEngaged = dayEngaged;
+    }
+    public void setDayEngaged(int day) {
+        this.dayEngaged = day;
+    }
+    public int getDayEngaged() {
+        return dayEngaged;
     }
     public String getName() {
         return name;

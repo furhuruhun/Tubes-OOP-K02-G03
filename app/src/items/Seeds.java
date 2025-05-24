@@ -1,3 +1,4 @@
+package items;
 public class Seeds extends BuyableItems{
     private String season;
     private int daystoharvest;

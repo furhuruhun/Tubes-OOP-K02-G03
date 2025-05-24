@@ -15,7 +15,7 @@ public class Harvesting extends Action{
         //asumsi ini tiap perform cuma sekali ambil panen-an
 
         //cek apakah tiles yang dimaksud bernilai (l)
-        if(player.getFarmname().getFarmMap().isPlanted(player.getLocation_infarm())) {
+        if(player.getFarmname().getFarmMap().isPlanted(player.getLocation_infarm()) && player.getEnergy() > this.energyCost) {
             Seeds seed = player.getFarmname().getFarmMap().getTile(player.getLocation_infarm()).getPlantedSeed();
 
             //convert crops dri seed

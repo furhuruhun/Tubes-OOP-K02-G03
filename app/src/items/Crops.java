@@ -1,3 +1,4 @@
+package items;
 public class Crops extends BuyableItems {
     private int jumlahperpanen;
     

@@ -1,3 +1,4 @@
+package items;
 public class Food extends BuyableItems{
     private int energy;
 

@@ -1,3 +1,4 @@
+package items;
 public class BuyableItems extends Items {
     private int hargaJual;
     private int hargaBeli;
@@ -7,15 +8,25 @@ public class BuyableItems extends Items {
         this.hargaJual = hargaJual;
         this.hargaBeli = hargaBeli;
     }
-    public int getHargaJual() {
+
+    @Override
+    public int getSellPrice() {
         return hargaJual;
     }
+
+    @Override
+    public boolean isSellable() {
+        return true;
+    }
+
     public void setHargaJual(int hargaJual) {
         this.hargaJual = hargaJual;
     }
+
     public int getHargaBeli() {
         return hargaBeli;
     }
+    
     public void setHargaBeli(int hargaBeli) {
         this.hargaBeli = hargaBeli;
     }

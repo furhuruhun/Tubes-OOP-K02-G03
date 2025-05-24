@@ -1,11 +1,14 @@
-package src.Shipping Bin;
+package ShippingBin;
 
-public import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
+
+import Player.Player;
+import items.Items;
 
 public class ShippingBin {
     private final int MAX_SLOTS = 16;
-    private final Map<Item, Float> bin;
+    private final Map<Items, Integer> bin;
     private boolean soldToday;
 
     public ShippingBin() {
@@ -20,14 +23,16 @@ public class ShippingBin {
     /**
      * Menambah item ke shipping bin.
      * Jika sudah terdapat pada bin, tambah quantity. 
+     * Item tidak bisa dikembalikan ke inventory.
      */
-    public void addItem(Item item, int quantity, Player player) {
+    public void addItem(Items item, int quantity, Player player) {
         if (item == null || quantity <= 0) {
             System.out.println("Item atau kuantitas tidak valid.");
             return;
         }
 
-        if (!player.inventory.checkItem(item) || !player.inventory.hasSufficientItem(item, quantity)) {
+        // Cek apakah item tersedia dan cukup
+        if (!player.getInventory().checkItem(item) || !player.getInventory().hasSufficientItem(item, quantity)) {
             System.out.println("Item tidak tersedia di inventory atau kuantitas kurang.");
             return;
         }
@@ -35,11 +40,13 @@ public class ShippingBin {
         boolean itemAlreadyInBin = bin.containsKey(item);
 
         if (itemAlreadyInBin) {
-            player.inventory.removeItem(item, quantity);
+            // Tambah jumlah ke bin
+            player.getInventory().removeItem(item, quantity);
             int currentQty = bin.get(item);
             bin.put(item, currentQty + quantity);
         } else if (bin.size() < MAX_SLOTS) {
-            player.inventory.removeItem(item, quantity);
+            // Slot baru
+            player.getInventory().removeItem(item, quantity);
             bin.put(item, quantity);
         } else {
             System.out.println("Shipping bin penuh! Tidak bisa menambahkan item baru.");
@@ -48,7 +55,8 @@ public class ShippingBin {
 
     /**
      * Menjual semua item dalam bin jika belum pernah dijual hari ini.
-     * Pemanggilan dari fungsi sleep().
+     * Pemanggilan dilakukan saat player tidur (sleep).
+     * Gold ditambahkan ke player.
      */
     public void sellBin(Player player) {
         if (soldToday) {
@@ -65,28 +73,28 @@ public class ShippingBin {
             .mapToInt(entry -> entry.getKey().getSellPrice() * entry.getValue())
             .sum();
 
-        player.addGold(totalSellPrice);
+        player.setGold(totalSellPrice);
         System.out.println("Item berhasil dijual. Total gold diterima: " + totalSellPrice);
         clearBin();
         soldToday = true;
     }
 
     /**
-     * Reset status penjualan harian (dipanggil oleh sistem saat hari baru).
+     * Reset status penjualan harian (dipanggil saat hari baru).
      */
     public void resetBinDay() {
         soldToday = false;
     }
 
     /**
-     * Clear semua item dalam shipping bin.
+     * Menghapus semua item dalam shipping bin (setelah dijual).
      */
-    public void clearBin() {
+    private void clearBin() {
         bin.clear();
     }
 
     /**
-     * Menampilkan semua item yang ada pada shipping bin
+     * Menampilkan isi shipping bin dan total harga jual.
      */
     public void printBin() {
         if (bin.isEmpty()) {
@@ -94,21 +102,21 @@ public class ShippingBin {
             return;
         }
 
-        System.out.printf("%-15s %-10s\n", "Item", "Quantity");
-        System.out.println("-----------------------------");
+        System.out.printf("%-20s %-10s %-10s\n", "Item", "Qty", "Total");
+        System.out.println("----------------------------------------");
 
         int totalSellPrice = 0;
-        for (Map.Entry<Item, Float> entry : bin.entrySet()) {
-            Item item = entry.getKey();
+        for (Map.Entry<Items, Integer> entry : bin.entrySet()) {
+            Items item = entry.getKey();
             int quantity = entry.getValue();
             int itemPrice = item.getSellPrice();
-            totalSellPrice += itemPrice * quantity;
+            int totalItemPrice = itemPrice * quantity;
+            totalSellPrice += totalItemPrice;
 
-            System.out.printf("%-15s %-10d\n", item.getName(), quantity);
+            System.out.printf("%-20s %-10d %-10d\n", item.getName(), quantity, totalItemPrice);
         }
 
+        System.out.println("----------------------------------------");
         System.out.println("Total Sell Price: " + totalSellPrice);
     }
-} {
-    
 }

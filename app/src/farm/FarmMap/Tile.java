@@ -1,4 +1,4 @@
-package src.farmmap;
+package farm.FarmMap;
 
 import items.Seeds;
 
