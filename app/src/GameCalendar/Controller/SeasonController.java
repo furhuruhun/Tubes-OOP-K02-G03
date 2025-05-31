@@ -5,8 +5,10 @@ import java.util.List;
 
 import GameCalendar.Model.Season;
 import GameCalendar.Model.ManageSeason;
+import items.Fish;
 // import GameCalendar.Model.Crop;
 // import GameCalendar.Model.Fish;
+import items.Seeds;
 
 public class SeasonController {
     private final ManageSeason manageSeason;
@@ -16,10 +18,10 @@ public class SeasonController {
     }
 
     // Menjaga crop yang kompatibel dengan musim
-    public void checkCropSurvival(List<Crop> allCrops, Season currSeason) {
-        Iterator<Crop> iterator = allCrops.iterator();
+    public void checkCropSurvival(List<Seeds> allCrops, Season currSeason) {
+        Iterator<Seeds> iterator = allCrops.iterator();
         while (iterator.hasNext()) {
-            Crop crop = iterator.next();
+            Seeds crop = iterator.next();
             if (!crop.isCompatibleWith(currSeason)) {
                 iterator.remove(); // Menghapus elemen saat iterasi
             }

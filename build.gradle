@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'application'
 }
 
@@ -8,11 +9,12 @@ repositories {
 
 dependencies {
     // kalo testing pake JUnit
+    implementation 'com.google.code.gson:gson:2.10.1'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 }
 
 application {
-    mainClass = 'Main.Main' // Ganti dengan nama main class kl dh dibikin
+    mainClass = 'Main' // Ganti dengan nama main class kl dh dibikin
 }
 
 sourceSets {
@@ -26,3 +28,16 @@ sourceSets {
 test {
     useJUnitPlatform()
 }
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'Main' // Ganti ini sesuai nama class utamamu
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }{
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+

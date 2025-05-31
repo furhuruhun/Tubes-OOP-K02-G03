@@ -1,19 +1,21 @@
 package Player;
 import items.Items;
+import java.util.List;
 
 public class NPC {
     private String name;
     private int heartpoints;
-    private Items loveditems;
-    private Items likeditems;
-    private Items hateditems;
+    private List<Items> loveditems;
+    private List<Items> likeditems;
+    private List<Items> hateditems;
     private String relationshipStatus;
     private String location;
     private int dayEngaged;
+    private static final int Max_Heartpoint = 150;
 
-    public NPC(String name, int heartpoints, Items loveditems, Items likeditems, Items hateditems, String relationshipStatus, String location, int dayEngaged) {
+    public NPC(String name, int heartpoints, List<Items> loveditems, List<Items> likeditems, List<Items> hateditems, String relationshipStatus, String location, int dayEngaged) {
         this.name = name;
-        this.heartpoints = heartpoints;
+        this.heartpoints = Math.min(heartpoints, Max_Heartpoint);
         this.loveditems = loveditems;
         this.likeditems = likeditems;
         this.hateditems = hateditems;
@@ -37,24 +39,32 @@ public class NPC {
         return heartpoints;
     }
     public void setHeartpoints(int heartpoints) {
-        this.heartpoints = heartpoints;
+        if(heartpoints > Max_Heartpoint){
+            this.heartpoints = Max_Heartpoint;
+        }
+        else if(heartpoints < 0){
+            this.heartpoints = 0;
+        }
+        else{
+            this.heartpoints = heartpoints;
+        }
     }
-    public Items getLoveditems() {
+    public List<Items> getLoveditems() {
         return loveditems;
     }
-    public void setLoveditems(Items loveditems) {
+    public void setLoveditems(List<Items> loveditems) {
         this.loveditems = loveditems;
     }
-    public Items getLikeditems() {
+    public List<Items> getLikeditems() {
         return likeditems;
     }
-    public void setLikeditems(Items likeditems) {
+    public void setLikeditems(List<Items> likeditems) {
         this.likeditems = likeditems;
     }
-    public Items getHateditems() {
+    public List<Items> getHateditems() {
         return hateditems;
     }
-    public void setHateditems(Items hateditems) {
+    public void setHateditems(List<Items> hateditems) {
         this.hateditems = hateditems;
     }
     public String getRelationshipStatus() {

@@ -1,9 +1,10 @@
 package GameCalendar.Controller;
 
+import farm.FarmMap.*;
+
 import GameCalendar.Model.GameTime;
 import GameCalendar.Model.Weather;
 import GameCalendar.Model.ManageWeather;
-// import GameCalendar.Model.FarmMap; 
 
 public class WeatherController {
     private static final double RAINY_PROBABILITY = 0.5;  // Probabilitas cuaca hujan

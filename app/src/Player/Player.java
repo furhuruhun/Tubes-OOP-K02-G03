@@ -4,7 +4,6 @@ import farm.Farm;
 import inventory.Inventory;
 import items.Items;
 
-
 public class Player {
     private String name;
     private String gender;
@@ -53,8 +52,8 @@ public class Player {
         if(energy > maxenergy){
             this.energy = maxenergy;
         }
-        else if(energy < 0){
-            this.energy = 0;
+        else if(energy < -20){
+            this.energy = -20;
         }
         else{
             this.energy = energy;
@@ -68,7 +67,6 @@ public class Player {
     }
     public NPC getPartner() {
         if(partner == null) {
-            System.out.println("You don't have a partner yet.");
             return null;
         } 
         else {
@@ -81,7 +79,7 @@ public class Player {
     public float getGold() {
         return gold;
     }
-    public void setGold(int gold) {
+    public void setGold(float gold) {
         if(gold < 0) {
             System.out.println("Gold cannot be negative.");
         } else {
@@ -94,12 +92,8 @@ public class Player {
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
-    public void addInventory(Items item) {
-        if(inventory.getItemsMap().containsKey(item)) {
-            inventory.addItem(item, 1);
-        } else {
-            inventory.addItem(item, 1);
-        }
+    public void addInventory(Items item, int qty) {
+        inventory.addItem(item, qty);
     }
     public void removefromInventory(Items item, int quantity) {
         if(inventory.getItemsMap().containsKey(item)) {
@@ -120,7 +114,22 @@ public class Player {
     public void setLocation_inworld(String location_inworld) {
         this.location_inworld = location_inworld;
     }
-    public boolean haveitem(Items item) {
-        return inventory.getItemsMap().containsKey(item);
+    public boolean haveitem(String item) {
+        return inventory.getItemsMap().keySet().stream()
+                .anyMatch(i -> i.getName().equalsIgnoreCase(item));
+    }
+    public void showStatus() {
+        System.out.println("Player Name: " + name);
+        System.out.println("Gender: " + gender);
+        System.out.println("Energy: " + energy);
+        System.out.println("Gold: " + gold);
+        System.out.println("Location in Farm: " + location_infarm);
+        System.out.println("Location in World: " + location_inworld);
+        System.out.println("Inventory: \n" + inventory.printInventory());
+        if (partner != null) {
+            System.out.println("Partner: " + partner.getName());
+        } else {
+            System.out.println("No partner yet.");
+        }
     }
 }

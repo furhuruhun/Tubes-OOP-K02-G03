@@ -1,6 +1,7 @@
 package Juday;
 
 import java.util.Scanner;
+import Player.Player;
 
 public class BlackJack {
     private Deck deck;
@@ -15,7 +16,7 @@ public class BlackJack {
         scanner = new Scanner(System.in);
     }
 
-    public void play() {
+    public void play(Player a) {
         System.out.print("Masukkan bet: ");
         int bet = scanner.nextInt();
         scanner.nextLine();
@@ -68,10 +69,13 @@ public class BlackJack {
         // Penentuan hasil
         if (dealer.isBusted() || player.getInitialValue() > dealer.getInitialValue()) {
             System.out.println("Selamat! Kamu menang. Uang kamu menjadi " + (bet * 2));
+            a.setGold(a.getGold() + bet * 2);
         } else if (player.getInitialValue() < dealer.getInitialValue()) {
             System.out.println("Kamu kalah.");
+            a.setGold(a.getGold() - bet);
         } else {
             System.out.println("Seri. Uang kamu kembali: " + bet);
+            a.setGold(a.getGold() + bet);
         }
     }
 }

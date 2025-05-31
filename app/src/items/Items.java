@@ -1,4 +1,7 @@
 package items;
+
+import java.util.Objects;
+
 public class Items {
     private String name;
 
@@ -11,12 +14,16 @@ public class Items {
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getSellPrice() {
-        return 0;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Items items = (Items) o;
+        return Objects.equals(name, items.name);
     }
 
-    public boolean isSellable() {
-        return false;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

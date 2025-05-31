@@ -7,7 +7,7 @@ public class WorldMap {
     private List<String> places;
 
     public WorldMap() {
-        this.places = List.of("Forest River", "Mountain Lake", "Ocean", "Store", "Mayor's House", "Caroline's House", "Perry's House", "Dasco's House", "Abigail's House");
+        this.places = List.of("Farm", "Forest River", "Mountain Lake", "Ocean", "Store", "Mayor's House", "Caroline's House", "Perry's House", "Dasco's House", "Abigail's House", "Dasco's Gambling Den");
     }
 
     public void showPlaces() {
@@ -15,6 +15,10 @@ public class WorldMap {
         for(String place: places) {
             System.out.println("- " + place);
         }
+    }
+
+        public List<String> getPlaces() {
+        return places;
     }
 
     public boolean isValidLocation(String Place) {

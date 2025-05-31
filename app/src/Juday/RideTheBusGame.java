@@ -1,7 +1,7 @@
 package Juday;
 
 import java.util.Scanner;
-
+import Player.Player;
 public class RideTheBusGame {
     private Deck deck = new Deck();
     private Scanner scanner = new Scanner(System.in);
@@ -11,7 +11,7 @@ public class RideTheBusGame {
         this.bet = initialBet;
     }
 
-    public void play() {
+    public void play(Player player) {
         int multiplier = 1;
         Card first = deck.drawCard();
         System.out.println("Stage 1 - Red or Black?");
@@ -74,7 +74,9 @@ public class RideTheBusGame {
             System.out.println("You lost.");
             return;
         }
-
-        System.out.println("You won! Final payout: " + (multiplier * bet));
+        int payout = multiplier * bet;
+        System.out.println("You won! Final payout: " + payout);
+        player.setGold(player.getGold() + payout);
+        System.out.println("Your new balance: " + player.getGold());
     }
 }

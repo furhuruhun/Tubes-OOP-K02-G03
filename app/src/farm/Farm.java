@@ -1,11 +1,10 @@
 package farm;
-import java.time.LocalTime;
-
-import GameCalendar.Model.GameTime;
-import GameCalendar.Model.Season;
-import GameCalendar.Model.Weather;
 import Player.Player;
 import farm.FarmMap.FarmMap;
+import GameCalendar.Model.Season;
+import GameCalendar.Model.GameTime;
+import GameCalendar.Model.Weather;
+import java.time.LocalTime;
 
 public class Farm {
     private String name;
@@ -16,9 +15,8 @@ public class Farm {
     private Season season;
     private Weather weather;
 
-    public Farm(String name, Player player, GameTime gameTime, FarmMap farmMap) {
+    public Farm(String name, GameTime gameTime, FarmMap farmMap) {
         this.name = name;
-        this.player = player;
         this.farmMap = farmMap;
         this.time = gameTime.getCurrTime();
         this.day = gameTime.getCurrDay();

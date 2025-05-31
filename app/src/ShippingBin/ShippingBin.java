@@ -3,13 +3,16 @@ package ShippingBin;
 import java.util.HashMap;
 import java.util.Map;
 
+import Player.Location;
 import Player.Player;
+import items.BuyableItems;
 import items.Items;
 
 public class ShippingBin {
     private final int MAX_SLOTS = 16;
     private final Map<Items, Integer> bin;
     private boolean soldToday;
+    private Location location;
 
     public ShippingBin() {
         this.bin = new HashMap<>();
@@ -19,6 +22,20 @@ public class ShippingBin {
     public int getMaxSlots() {
         return MAX_SLOTS;
     }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location=location;
+    }
+
+    public Map<Items, Integer> getBin() {
+        return bin;
+    }
+
+    
 
     /**
      * Menambah item ke shipping bin.
@@ -70,7 +87,7 @@ public class ShippingBin {
         }
 
         int totalSellPrice = bin.entrySet().stream()
-            .mapToInt(entry -> entry.getKey().getSellPrice() * entry.getValue())
+            .mapToInt(entry -> ((BuyableItems)entry.getKey()).getHargaJual() * entry.getValue())
             .sum();
 
         player.setGold(totalSellPrice);
@@ -109,7 +126,7 @@ public class ShippingBin {
         for (Map.Entry<Items, Integer> entry : bin.entrySet()) {
             Items item = entry.getKey();
             int quantity = entry.getValue();
-            int itemPrice = item.getSellPrice();
+            int itemPrice = ((BuyableItems)item).getHargaJual();
             int totalItemPrice = itemPrice * quantity;
             totalSellPrice += totalItemPrice;
 

@@ -1,56 +1,43 @@
 package House;
 
-import Player.*;
+import Player.Location; // Assuming Location is in Player package
 
 public class House {
     private String name;
-    private String owner;
-    private Location location;
-    
-    public House(Player owner) {
-        this.owner = owner.getName();
-        this.name = owner.getName() + "'s House";
+    private Location location; // Top-left location of the house on the FarmMap
+
+    // Dimensions of the house as per PDF (6x6)
+    public static final int DEFAULT_WIDTH = 6;
+    public static final int DEFAULT_HEIGHT = 6;
+
+    public House() {
+        this.name = "Player's House";
+        // Location is set by FarmMap when placing the house
     }
 
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-    public String getOwner() {
-        return owner;
-    }
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
+
     public Location getLocation() {
         return location;
     }
+
     public void setLocation(Location location) {
         this.location = location;
     }
 
-//     public boolean cook(Player owner, Recipe recipe) {
-//         List<Item> ingredients = recipe.getBahanBaku();
+    // Optional: getters for dynamic dimensions if you ever need them,
+    // but for a fixed size, the static final fields are usually sufficient.
+    public int getWidth() {
+        return DEFAULT_WIDTH;
+    }
 
-//         if (!owner.getInventory().haveitem(ingredients)) {
-//             System.out.println("Bahan tidak cukup");
-//             return false;
-//         }
-
-//         owner.getInventory().removeItem(ingredients);
-//         owner.getInventory().addItem(recipe.getResult(), 1);
-//         System.out.println("Berhasil memasak: " + recipe.getResult().getName());
-//         return true;
-//     }
-
-//     public void rest(Player owner) {
-//         owner.setEnergy(owner.getMaxEnergy());
-//         System.out.println("Kamu beristirahat dan memulihkan energimu");
-//     }
-
-//     public void watchTV() {
-//         System.out.println("Kamu menonton TV.");
-//     }
+    public int getHeight() {
+        return DEFAULT_HEIGHT;
+    }
 }

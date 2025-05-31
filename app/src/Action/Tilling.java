@@ -1,43 +1,60 @@
 package Action;
 
-import src.farmmap.FarmMap;
-import src.farmmap.Tile;
+import GameCalendar.Model.GameTime;
+import Player.Location;
+import Player.Player;
 
-public class Tilling extends Action {
-    private int x, y;
-
-    public Tilling(int x, int y) {
+public class Tilling extends Action{
+    public Tilling() {
         super(5, 5);
-        this.x = x;
-        this.y = y;
     }
 
     @Override
-    public void perform(Player player) {
-        if (player.getEnergy() < energyCost) {
-            System.out.println("Energi tidak cukup");
-            return;
-        }
-        FarmMap farmMap = player.getFarmname().getFarmMap();
-        Tile tile = farmMap.getTile(x, y);
+    public void perform(Player player, GameTime gameTime) {
+        if(player.haveitem("Hoe")){ //cek punya hoe apa ngga
 
-        if (!tile.isTillable()) {
-            System.out.println("Tile ini tidak bisa dibajak.");
-            return;
+            if(player.getFarmname().getFarmMap().isEmpty(new Location(player.getLocation_infarm().getX()+1, player.getLocation_infarm().getY()))){ //cek tile di posisi player bisa di tiling apa ngga
+                if(player.getEnergy() >= -15){ //cek energi
+                    player.getFarmname().getFarmMap().getTile(new Location(player.getLocation_infarm().getX()+1, player.getLocation_infarm().getY())).setSymbol('t'); //set tile di posisi player jadi tilled
+                    System.out.println("Kamu sudah menyiapkan tanah");
+                    player.setEnergy(player.getEnergy() - 5);
+                    gameTime.addTime(5);
+                    if (player.getEnergy() <= -20){
+                            System.out.println("Kamu sudah tidak punya energi, kamu akan tidur sekarang.");
+                            Sleeping sleep = new Sleeping();
+                            sleep.perform(player, gameTime);
+                            System.out.println("Kamu sudah tidur");
+                    }
+                } 
+                else {
+                    System.out.println("Energi kamu tidak cukup untuk tilling");
+                }    
+            }
+            else{
+                System.out.println("Gak bisa di tiling");
+            }
+        }
+        else{
+            System.out.println("Butuh hoe!");
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
-        if (!player.getLocation_inworld().equals("Farm")) {
-            System.out.println("Harus berada di dalam farm.");
-            return;
-        }
-
-        if (player.haveitem(new Items("Hoe")) && tile.getSymbol() == '.') {
-            tile.setSymbol('t');
-            player.setEnergy(player.getEnergy() - energyCost);
-            player.getFarmname().getTime().addMinutes(timeCostInMinute);
-            System.out.println("Tile di (" + x + ", " + y + ") berhasil di tilling.");
+    }
+    private void clearScreen() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (Exception e) {
+                for (int i = 0; i < 50; ++i) System.out.println();
+            }
         } else {
-            System.out.println("Tilling gagal.");
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
         }
     }
 }

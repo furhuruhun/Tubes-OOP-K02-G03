@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import GameCalendar.Observer.TimeObserver;
+
 // Interface untuk Observer Pattern
 interface WeatherObserver {
     void onWeatherChange(Weather weather);
@@ -30,6 +32,7 @@ public class GameTime {
     private Season currSeason;
     private Weather currWeather;
     private List<WeatherObserver> observers;
+    private List<TimeObserver> timeObservers;
     private Random random;
     private int rainyDaysThisSeason;
     private boolean isPaused;
@@ -41,9 +44,38 @@ public class GameTime {
         this.currSeason = Season.SPRING;
         this.currWeather = Weather.SUNNY;
         this.observers = new ArrayList<>();
+        this.timeObservers = new ArrayList<>();
         this.random = new Random();
         this.rainyDaysThisSeason = 0;
         this.isPaused = false;
+        updateWeather();
+    }
+
+        public void registerTimeObserver(TimeObserver observer) {
+        if (!timeObservers.contains(observer)) {
+            timeObservers.add(observer);
+        }
+    }
+
+    public void removeTimeObserver(TimeObserver observer) {
+        timeObservers.remove(observer);
+    }
+
+    private void notifyTimeUpdateObservers() {
+        // Notifikasi semua observer waktu umum
+        for (TimeObserver observer : new ArrayList<>(timeObservers)) { // Iterasi copy untuk menghindari ConcurrentModificationException
+            observer.onTimeUpdate(this);
+        }
+        // Cek khusus untuk jam 2 AM
+        if (this.currTime.getHour() >= 2 && this.currTime.getHour() < 6) {
+            notifyTwoAMObservers();
+        }
+    }
+
+    private void notifyTwoAMObservers() {
+        for (TimeObserver observer : new ArrayList<>(timeObservers)) { // Iterasi copy
+            observer.onTwoAM(this);
+        }
     }
 
     // Metode untuk update waktu
@@ -51,7 +83,7 @@ public class GameTime {
         if (isPaused) return;
 
         // Maju 5 menit (1 detik game time)
-        advanceTimeByMinutes(5);
+        advanceTimeByMinutes(5, true);
 
         // Update season/weather jika hari berganti
         if (dayHasChanged()) {
@@ -74,13 +106,14 @@ public class GameTime {
     public void addTime(int minutes) {
         if (minutes < 0) throw new IllegalArgumentException("Menit harus bernilai positif");
 
-        advanceTimeByMinutes(minutes);
+        advanceTimeByMinutes(minutes, true);
 
         // Update season/weather jika hari berganti
         if (dayHasChanged()) {
             updateSeason();
             updateWeather();
         }
+
     }
 
     // Skip ke jam tertentu pada hari berikutnya
@@ -89,31 +122,36 @@ public class GameTime {
             throw new IllegalArgumentException("Target hour harus bernilai 0-23");
         }
 
-        currTime = LocalTime.of(targetHour, 0);
-        if (currTime.isBefore(LocalTime.of(6, 0))) {
-            currDay++;
-            updateSeason();
-            updateWeather();
+        // Untuk aksi seperti tidur yang melompat ke pagi hari berikutnya (misalnya jam 6),
+        // kita selalu ingin hari bertambah.
+        
+        this.currDay++; // Langsung tambahkan hari ke hari berikutnya
+        this.currTime = LocalTime.of(targetHour, 0); // Atur waktu ke targetHour di hari yang baru
+
+        // Selalu update musim dan cuaca untuk hari yang baru
+        // Metode updateSeason dan updateWeather akan memeriksa kondisi hari dan musim saat ini.
+        updateSeason(); //
+        updateWeather(); //
+        notifyTimeUpdateObservers(); 
+    }
+
+    private void advanceTimeByMinutes(int minutes, boolean notify) {
+        if (isPaused) return;
+
+        // Logika untuk memajukan waktu tanpa mengubah hari
+        long currentTotalMinutesInDay = (long)this.currTime.getHour() * 60 + this.currTime.getMinute();
+        long newTotalMinutesInDay = currentTotalMinutesInDay + minutes;
+
+        // Hitung waktu baru dalam siklus 24 jam (1440 menit)
+        int finalMinutesInThisDayCycle = (int) (newTotalMinutesInDay % (24 * 60));
+        this.currTime = LocalTime.of(finalMinutesInThisDayCycle / 60, finalMinutesInThisDayCycle % 60);
+
+        if (notify) {
+            notifyTimeUpdateObservers();
         }
     }
 
-    // Helper method untuk maju sebesar menit tertentu
-    private void advanceTimeByMinutes(int minutes) {
-        int currentMinutes = currTime.getHour() * 60 + currTime.getMinute();
-        currentMinutes += minutes;
-
-        // Menghitung hari yang telah dilewati dan sisa menit
-        int daysPassed = currentMinutes / 1440; // 1 hari = 1440 menit
-        int remainingMinutes = currentMinutes % 1440;
-
-        // Update day
-        currDay += daysPassed;
-
-        // Set new time
-        currTime = LocalTime.of(remainingMinutes / 60, remainingMinutes % 60);
-    }
-
-    // Helper method untuk cek apakah hari sudah berganti
+    // Helper method untuk cek apakah hari sudah bergan
     private boolean dayHasChanged() {
         return currTime.equals(LocalTime.of(6, 0));
     }
@@ -155,12 +193,14 @@ public class GameTime {
 
     // Add observer
     public void addObserver(WeatherObserver observer) {
-        observers.add(observer);
+        if(!observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
 
     // Notify observers when weather changes
     private void notifyObservers() {
-        for (WeatherObserver observer : observers) {
+        for (WeatherObserver observer : new ArrayList<>(observers)) {
             observer.onWeatherChange(currWeather);
         }
     }

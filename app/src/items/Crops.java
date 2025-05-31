@@ -1,7 +1,8 @@
 package items;
+
 public class Crops extends BuyableItems {
     private int jumlahperpanen;
-    
+
     public Crops(String name, int hargaJual, int hargaBeli, int jumlahperpanen) {
         super(name, hargaJual, hargaBeli);
         this.jumlahperpanen = jumlahperpanen;

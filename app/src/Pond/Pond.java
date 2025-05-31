@@ -1,4 +1,5 @@
 package Pond;
+import Player.Location;
 
 public class Pond{
     private String name;

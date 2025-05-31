@@ -8,25 +8,15 @@ public class BuyableItems extends Items {
         this.hargaJual = hargaJual;
         this.hargaBeli = hargaBeli;
     }
-
-    @Override
-    public int getSellPrice() {
+    public int getHargaJual() {
         return hargaJual;
     }
-
-    @Override
-    public boolean isSellable() {
-        return true;
-    }
-
     public void setHargaJual(int hargaJual) {
         this.hargaJual = hargaJual;
     }
-
     public int getHargaBeli() {
         return hargaBeli;
     }
-    
     public void setHargaBeli(int hargaBeli) {
         this.hargaBeli = hargaBeli;
     }
