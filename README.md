@@ -19,7 +19,11 @@ Fitur utama SpakborHills meliputi:
 
 ## Cara Menjalankan Program
 1. Berada di direktori utama proyek
-2. Jalankan program:
+2. Untuk Build Gradle :
+ ```bash
+ .\gradlew.bat build
+ ```
+4. Jalankan program:
  ```bash
  java -jar build\libs\Tubes-OOP-K02-G03.jar
  ```
